@@ -1,0 +1,8 @@
+#requrements/dev.txt
+-r common.txt
+django-celery-beat==1.4.0
+django-celery-results==1.0.4
+requests
+pinyin
+ldap3
+gunicorn

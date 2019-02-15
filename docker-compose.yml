@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  redis:
+    container_name: crontab-redis
+    image: redis
+    networks:
+      - nginx_network
+
+  crontab:
+    container_name: crontab
+    build: .
+    volumes:
+      - ./:/opt/crontab/
+      - static_volume:/opt/crontab/data/static
+    ports:
+      - 8080
+    depends_on:
+      - redis
+    networks:
+      - nginx_network
+  
+  nginx:
+    container_name: crontab-nginx
+    build:
+      context: ./files/nginx
+      dockerfile: Dockerfile
+    ports: 
+      - 80:80
+    volumes:
+      - static_volume:/opt/crontab/data/static
+    depends_on:
+      - crontab
+    networks:
+      - nginx_network
+
+
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+    static_volume:
